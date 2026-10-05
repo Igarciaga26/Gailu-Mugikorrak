@@ -1,10 +1,8 @@
 package com.example.basiclayout01
 
 import android.os.Bundle
-import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -14,7 +12,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -37,6 +34,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -59,6 +58,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
@@ -70,29 +70,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-private data class DrawableStringPair(
-    @param:DrawableRes val drawable: Int,
-    @param:StringRes val text: Int
-)
-
-private val alignYourBodyData = listOf(
-    DrawableStringPair(R.drawable.ab1_inversions, R.string.ab1_inversions),
-    DrawableStringPair(R.drawable.ab2_quick_yoga, R.string.ab2_quick_yoga),
-    DrawableStringPair(R.drawable.ab3_stretching, R.string.ab3_stretching),
-    DrawableStringPair(R.drawable.ab4_tabata, R.string.ab4_tabata),
-    DrawableStringPair(R.drawable.ab5_hiit, R.string.ab5_hiit),
-    DrawableStringPair(R.drawable.ab6_pre_natal_yoga, R.string.ab6_pre_natal_yoga)
-)
-
-private val favoriteCollectionsData = listOf(
-    DrawableStringPair(R.drawable.fc1_short_mantras, R.string.fc1_short_mantras),
-    DrawableStringPair(R.drawable.fc2_nature_meditations, R.string.fc2_nature_meditations),
-    DrawableStringPair(R.drawable.fc3_stress_and_anxiety, R.string.fc3_stress_and_anxiety),
-    DrawableStringPair(R.drawable.fc4_self_massage, R.string.fc4_self_massage),
-    DrawableStringPair(R.drawable.fc5_overwhelmed, R.string.fc5_overwhelmed),
-    DrawableStringPair(R.drawable.fc6_nightly_wind_down, R.string.fc6_nightly_wind_down)
-)
 
 @Composable
 fun SearchBar(modifier: Modifier = Modifier) {
@@ -210,14 +187,17 @@ fun FavoriteCollectionCardPreview() {
 }
 
 @Composable
-fun AlignYourBodyRow(modifier: Modifier = Modifier) {
+fun AlignYourBodyRow(
+    items: List<ItemEntity>,
+    modifier: Modifier = Modifier
+) {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier,
         contentPadding = PaddingValues(horizontal = 16.dp),
     ) {
-        items(alignYourBodyData) { item ->
-            AlignYourBodyElement(item.drawable, item.text)
+        items(items) { item ->
+            AlignYourBodyElement(item.drawableResId, item.titleResId)
         }
     }
 }
@@ -226,12 +206,17 @@ fun AlignYourBodyRow(modifier: Modifier = Modifier) {
 @Composable
 fun AlignYourBodyRowPreview() {
     BasicLayout01Theme {
-        AlignYourBodyRow()
+        AlignYourBodyRow(
+            items = listOf(
+                ItemEntity(titleResId = R.string.ab1_inversions, drawableResId = R.drawable.ab1_inversions, category = "body")
+            )
+        )
     }
 }
 
 @Composable
 fun FavoriteCollectionsGrid(
+    items: List<ItemEntity>,
     modifier: Modifier = Modifier
 ) {
     LazyHorizontalGrid(
@@ -241,9 +226,9 @@ fun FavoriteCollectionsGrid(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier.height(168.dp)
     ) {
-        items(favoriteCollectionsData) { item ->
+        items(items) { item ->
             FavoriteCollectionCard(
-                item.drawable, item.text,
+                item.drawableResId, item.titleResId,
                 Modifier.height(80.dp)
             )
         }
@@ -254,7 +239,11 @@ fun FavoriteCollectionsGrid(
 @Composable
 fun FavoriteCollectionsGridPreview() {
     BasicLayout01Theme {
-        FavoriteCollectionsGrid()
+        FavoriteCollectionsGrid(
+            items = listOf(
+                ItemEntity(titleResId = R.string.fc2_nature_meditations, drawableResId = R.drawable.fc2_nature_meditations, category = "favorite")
+            )
+        )
     }
 }
 
@@ -278,19 +267,22 @@ fun HomeSection(
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: MainViewModel = viewModel()
 ) {
+    val alignYourBodyList by viewModel.alignYourBodyList.collectAsState()
+    val favoriteCollectionsList by viewModel.favoriteCollectionsList.collectAsState()
+
     Column(modifier.verticalScroll(rememberScrollState())) {
         Spacer(Modifier.height(16.dp))
         SearchBar(Modifier.padding(horizontal = 16.dp))
         HomeSection(title = R.string.align_your_body) {
-            AlignYourBodyRow()
+            AlignYourBodyRow(items = alignYourBodyList)
         }
         HomeSection(title = R.string.favorite_collections) {
-            FavoriteCollectionsGrid()
+            FavoriteCollectionsGrid(items = favoriteCollectionsList)
         }
         Spacer(Modifier.height(16.dp))
-
     }
 }
 
@@ -413,6 +405,3 @@ fun MySootheApp(windowSize: WindowSizeClass) {
         }
     }
 }
-
-
-
