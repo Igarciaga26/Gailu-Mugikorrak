@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "966786751018",
+    "project_id": "composetodo-3b5f0",
+    "storage_bucket": "composetodo-3b5f0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:966786751018:android:df93cbedfe8195adc88153",
+        "android_client_info": {
+          "package_name": "com.android.example.composetodo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDV5XhaAfXvHI2ACJ8qKLJCrs1LElp90OU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
