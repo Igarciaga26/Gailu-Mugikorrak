@@ -63,4 +63,4 @@ Detekzioa fotograma batetik bestera aldatzen zen eta dir-dir egiten zuen, beraz 
 - **Emulatzailean**, atzeko kamera `VirtualScene` modura konfiguratu behar da. QR kodeak probatzeko, `Webcam0` erabili daiteke PCko webkamerarekin. Emulatzaileak ez du flash fisikorik.
 
 ## Kaptura
-![](C:\Users\ik012982i18\Pictures\Screenshots\Pantaila-argazkia 2026-11-20 110736.png)
+![Kamara aplikazioaren pantaila-argazkia](imagenes/Pantaila-argazkia%202026-11-20%20110736.png)
