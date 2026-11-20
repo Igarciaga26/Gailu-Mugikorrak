@@ -2,10 +2,6 @@
 
 Android aplikazio honek kameraren aurrebista erakusten du, argazkiak ateratzen ditu, denbora errealean figura geometrikoak eta QR kodeak antzematen ditu, eta egindako argazkien eta irakurritako QR kodeen historiala **Room** datu-base batean gordetzen du.
 
-## Pantaila-argazkia
-
-![Kamara aplikazioaren pantaila-argazkia](imagenes/pantaila-argazkia.png)
-
 ## Funtzionalitateak
 
 - Kameraren baimena eskatzen du aplikazioa abiaraztean.
